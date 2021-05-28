@@ -19,6 +19,7 @@ class _EnvironmentState extends State<Environment> {
   ];
 
   int selectedIndex;
+  String result = '';
 
   @override
   Widget build(BuildContext context) {
@@ -54,19 +55,22 @@ class _EnvironmentState extends State<Environment> {
                   thickness: 2,
                 ),
                 Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  // crossAxisAlignment: CrossAxisAlignment.s,
                   children: [
                     Text('Selected'),
-                    SizedBox(
-                      width: 5.0,
-                    ),
-                    Expanded(
-                      child: TextField(
-                        decoration: InputDecoration(
-                          border: InputBorder.none,
-                        ),
-                      ),
-                    ),
+                    // SizedBox(
+                    //   width: 5.0,
+                    // ),
+                    // Expanded(
+                    //   // child: TextField(
+                    //   //   decoration: InputDecoration(
+                    //   //     border: InputBorder.none,
+                    //   //   ),
+                    //   // ),
+                    //   child: Text('$result'),
+                    // ),
+                    Text('$result'),
                   ],
                 ),
               ],
@@ -92,6 +96,7 @@ class _EnvironmentState extends State<Environment> {
                   onTap: () {
                     setState(() {
                       selectedIndex = index;
+                      result = env[selectedIndex].title;
                     });
                   },
                   selected: env[index].selected,

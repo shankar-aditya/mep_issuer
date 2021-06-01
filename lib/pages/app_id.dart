@@ -39,24 +39,24 @@ class _AppIdState extends State<AppId> {
         ),
       ),
       // body: Container(
-      //   padding: EdgeInsets.only(left: 16, top: 25, right: 16),
-      //   child: ListView(
-      //     physics: NeverScrollableScrollPhysics(),
-      //     children: List.generate(apps.length, (index) {
-      //       return ListTile(
-      //         onTap: () {
-      //           setState(() {
-      //             selectedIndex = index;
-      //           });
-      //         },
-      //         selected: apps[index].selected,
-      //         title: Text(apps[index].title),
-      //         trailing: (selectedIndex == index)
-      //             ? Icon(Icons.check, color: Colors.blueAccent)
-      //             : null,
-      //       );
-      //     }),
-      //   ),
+      // padding: EdgeInsets.only(left: 16, top: 25, right: 16),
+      // child: ListView(
+      //   physics: NeverScrollableScrollPhysics(),
+      //   children: List.generate(apps.length, (index) {
+      //     return ListTile(
+      //       onTap: () {
+      //         setState(() {
+      //           selectedIndex = index;
+      //         });
+      //       },
+      //       selected: apps[index].selected,
+      //       title: Text(apps[index].title),
+      //       trailing: (selectedIndex == index)
+      //           ? Icon(Icons.check, color: Colors.blueAccent)
+      //           : null,
+      //     );
+      //   }),
+      // ),
       // ),
       body: Container(
         padding: EdgeInsets.only(left: 16, top: 25, right: 16),

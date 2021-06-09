@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mep_issuer/utils/user_env_preferences.dart';
 
 class Environment extends StatefulWidget {
   Environment({Key key}) : super(key: key);
@@ -22,6 +23,14 @@ class _EnvironmentState extends State<Environment> {
   String result = '';
 
   @override
+  void initState() {
+    super.initState();
+
+    result = UserEnvPreferences.getEnv() ?? '';
+    selectedIndex = UserEnvPreferences.getInd() ?? -1;
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
@@ -32,7 +41,6 @@ class _EnvironmentState extends State<Environment> {
           child: Row(
             children: [
               Icon(Icons.arrow_back_ios),
-              // Text('Settings'),
             ],
           ),
         ),
@@ -40,9 +48,11 @@ class _EnvironmentState extends State<Environment> {
         title: Text(
           'Environment',
         ),
+        backgroundColor: Color(0xFFF2F2F7),
       ),
       body: Container(
-        padding: EdgeInsets.only(left: 16, top: 25, right: 16),
+        padding: EdgeInsets.only(top: 25),
+        color: Color(0xfff2f2f7),
         child: ListView(
           physics: NeverScrollableScrollPhysics(),
           children: [
@@ -51,32 +61,31 @@ class _EnvironmentState extends State<Environment> {
               physics: NeverScrollableScrollPhysics(),
               children: [
                 Divider(
-                  height: 15,
+                  height: 1,
                   thickness: 2,
                 ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  // crossAxisAlignment: CrossAxisAlignment.s,
-                  children: [
-                    Text('Selected'),
-                    // SizedBox(
-                    //   width: 5.0,
-                    // ),
-                    // Expanded(
-                    //   // child: TextField(
-                    //   //   decoration: InputDecoration(
-                    //   //     border: InputBorder.none,
-                    //   //   ),
-                    //   // ),
-                    //   child: Text('$result'),
-                    // ),
-                    Text('$result'),
-                  ],
+                Container(
+                  color: Colors.white,
+                  padding:
+                      EdgeInsets.only(top: 10, bottom: 10, right: 15, left: 15),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        'Selected',
+                        style: TextStyle(fontSize: 18),
+                      ),
+                      Text(
+                        '$result',
+                        style: TextStyle(fontSize: 15),
+                      ),
+                    ],
+                  ),
                 ),
               ],
             ),
             Divider(
-              height: 15,
+              height: 1,
               thickness: 2,
             ),
             SizedBox(
@@ -85,31 +94,41 @@ class _EnvironmentState extends State<Environment> {
             Text(
                 "Changing this will restart the app upon leaving the dev dashboard."),
             Divider(
-              height: 15,
+              height: 1,
               thickness: 2,
             ),
             ListView(
               shrinkWrap: true,
               physics: NeverScrollableScrollPhysics(),
               children: List.generate(env.length, (index) {
-                return ListTile(
-                  onTap: () {
-                    setState(() {
-                      selectedIndex = index;
-                      result = env[selectedIndex].title;
-                    });
-                  },
-                  selected: env[index].selected,
-                  title: Text(env[index].title),
-                  trailing: (selectedIndex == index)
-                      ? Icon(Icons.check, color: Colors.blueAccent)
-                      : null,
+                return Container(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      ListTile(
+                        tileColor: Colors.white,
+                        onTap: () async {
+                          setState(() {
+                            this.selectedIndex = index;
+                            this.result = env[selectedIndex].title;
+                          });
+                          await UserEnvPreferences.setEnv(result);
+                          await UserEnvPreferences.setInd(selectedIndex);
+                        },
+                        selected: env[index].selected,
+                        title: Text(env[index].title),
+                        trailing: (selectedIndex == index)
+                            ? Icon(Icons.check, color: Colors.blueAccent)
+                            : null,
+                      ),
+                      Divider(
+                        height: 1,
+                        thickness: 2,
+                      ),
+                    ],
+                  ),
                 );
               }),
-            ),
-            Divider(
-              height: 15,
-              thickness: 2,
             ),
           ],
         ),

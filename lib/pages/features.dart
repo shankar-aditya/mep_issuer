@@ -27,40 +27,69 @@ class _FeaturesHomeState extends State<FeaturesHome> {
         title: Text(
           'FDNB BANK',
         ),
+        backgroundColor: Color(0xFFF2F2F7),
       ),
       body: Container(
-        padding: EdgeInsets.only(left: 16, top: 25, right: 16),
+        color: Color(0xfff2f2f7),
+        // padding: EdgeInsets.only(left: 16, top: 25, right: 16),
         child: ListView(
           physics: NeverScrollableScrollPhysics(),
           children: [
             Image(image: AssetImage('assets/images/Assembled.png')),
-            Text(
-              'Features',
+            Row(
+              children: [
+                SizedBox(
+                  width: 18,
+                ),
+                Text('Features', style: TextStyle(fontSize: 18)),
+              ],
             ),
             Divider(
-              height: 15,
+              height: 1,
               thickness: 2,
             ),
             ListTile(
+              tileColor: Colors.white,
               leading: CircleAvatar(
                 backgroundImage: AssetImage('assets/images/icon_feature.jpg'),
               ),
-              title: Text('Digital Wallet'),
+              title: Text(
+                'Digital Wallet',
+                style: TextStyle(
+                  color: Color(0xff000000),
+                ),
+              ),
               subtitle: Text('Link your card to pay in-store'),
-              trailing: Icon(Icons.arrow_forward_ios),
-              onTap: () {},
-            ),
-            ListTile(
-              leading: CircleAvatar(
-                backgroundImage: AssetImage('assets/images/icon_feature.jpg'),
+              trailing: Icon(
+                Icons.arrow_forward_ios,
+                color: Color(0xff000000),
               ),
-              title: Text('Display Card UI'),
-              subtitle: Text('View your card information'),
-              trailing: Icon(Icons.arrow_forward_ios),
               onTap: () {},
             ),
             Divider(
-              height: 15,
+              height: 1,
+              thickness: 2,
+            ),
+            ListTile(
+              tileColor: Colors.white,
+              leading: CircleAvatar(
+                backgroundImage: AssetImage('assets/images/icon_feature.jpg'),
+              ),
+              title: Text(
+                'Display Card UI',
+                style: TextStyle(
+                  color: Color(0xff000000),
+                ),
+              ),
+              subtitle: Text('View your card information'),
+              trailing: Icon(
+                Icons.arrow_forward_ios,
+                color: Color(0xff000000),
+              ),
+              onTap: () {},
+            ),
+            Divider(
+              height: 1,
               thickness: 2,
             ),
           ],

@@ -16,6 +16,7 @@ class _HomeState extends State<Home> {
       return Scaffold(
         appBar: AppBar(
           title: Text('MEP Issuer'),
+          backgroundColor: Color(0xFFF2F2F7),
           actions: <Widget>[
             IconButton(
               icon: Icon(Icons.settings),
@@ -28,8 +29,8 @@ class _HomeState extends State<Home> {
         ),
         body: Container(
           padding: EdgeInsets.only(
-            left: 50,
-            right: 50,
+            left: 30,
+            right: 30,
           ),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -40,9 +41,12 @@ class _HomeState extends State<Home> {
                   Navigator.of(context).push(MaterialPageRoute(
                       builder: (BuildContext context) => FeaturesHome()));
                 },
-                color: Colors.grey,
-                child: Text('Features'),
-                height: 40,
+                color: Color(0xFFF0F0F0),
+                child: Text(
+                  'Features',
+                  style: TextStyle(fontSize: 20),
+                ),
+                height: 60,
               ),
             ],
           ),

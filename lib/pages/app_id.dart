@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mep_issuer/utils/app_id_preferences.dart';
 
 class AppId extends StatefulWidget {
   AppId({Key key}) : super(key: key);
@@ -17,97 +18,167 @@ class _AppIdState extends State<AppId> {
   ];
 
   int selectedIndex;
+  String customApp = '';
+
+  TextEditingController _controller = new TextEditingController();
+  bool _enabled = false;
+
+  @override
+  void initState() {
+    super.initState();
+
+    customApp = AppIdPreferences.getCustomId() ?? '';
+    selectedIndex = AppIdPreferences.getId();
+
+    setState(() {
+      _controller.text = customApp;
+    });
+
+    _controller.addListener(() {
+      setState(() {});
+    });
+    if (selectedIndex == 4) {
+      setState(() {
+        _enabled = true;
+        _controller.text = customApp;
+      });
+    } else {
+      setState(() {
+        _enabled = false;
+        this.customApp = '';
+        _controller.text = '';
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        leading: FlatButton(
-          onPressed: () {
-            Navigator.of(context).pop();
-          },
-          child: Row(
-            children: [
-              Icon(Icons.arrow_back_ios),
-              // Text('Settings'),
-            ],
-          ),
-        ),
-        centerTitle: true,
-        title: Text(
-          'App Id',
-        ),
-      ),
-      // body: Container(
-      // padding: EdgeInsets.only(left: 16, top: 25, right: 16),
-      // child: ListView(
-      //   physics: NeverScrollableScrollPhysics(),
-      //   children: List.generate(apps.length, (index) {
-      //     return ListTile(
-      //       onTap: () {
-      //         setState(() {
-      //           selectedIndex = index;
-      //         });
-      //       },
-      //       selected: apps[index].selected,
-      //       title: Text(apps[index].title),
-      //       trailing: (selectedIndex == index)
-      //           ? Icon(Icons.check, color: Colors.blueAccent)
-      //           : null,
-      //     );
-      //   }),
-      // ),
-      // ),
-      body: Container(
-        padding: EdgeInsets.only(left: 16, top: 25, right: 16),
-        child: ListView(
-          physics: NeverScrollableScrollPhysics(),
-          children: [
-            Divider(
-              height: 15,
-              thickness: 2,
-            ),
-            ListView(
-              shrinkWrap: true,
-              physics: NeverScrollableScrollPhysics(),
-              children: List.generate(apps.length, (index) {
-                return ListTile(
-                  onTap: () {
-                    setState(() {
-                      selectedIndex = index;
-                    });
-                  },
-                  selected: apps[index].selected,
-                  title: Text(apps[index].title),
-                  trailing: (selectedIndex == index)
-                      ? Icon(Icons.check, color: Colors.blueAccent)
-                      : null,
-                );
-              }),
-            ),
-            Divider(
-              height: 15,
-              thickness: 2,
-            ),
-            SizedBox(height: 30),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.start,
+    return GestureDetector(
+      onTap: () => FocusScope.of(context).requestFocus(FocusNode()),
+      child: Scaffold(
+        appBar: AppBar(
+          leading: FlatButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+            child: Row(
               children: [
-                Text('Custom App Id'),
-                SizedBox(
-                  width: 5.0,
-                ),
-                Expanded(
-                  child: TextField(
-                    decoration: InputDecoration(
-                      hintText: "External App Id",
-                      border: InputBorder.none,
-                    ),
-                  ),
-                ),
+                Icon(Icons.arrow_back_ios),
+                // Text('Settings'),
               ],
             ),
-          ],
+          ),
+          centerTitle: true,
+          title: Text(
+            'App Id',
+          ),
+          backgroundColor: Color(0xFFF2F2F7),
+        ),
+        body: Container(
+          padding: EdgeInsets.only(top: 25),
+          color: Color(0xfff2f2f7),
+          child: ListView(
+            // physics: NeverScrollableScrollPhysics(),
+            children: [
+              Divider(
+                height: 1,
+                thickness: 2,
+              ),
+              ListView(
+                shrinkWrap: true,
+                physics: NeverScrollableScrollPhysics(),
+                children: List.generate(apps.length, (index) {
+                  return Container(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        ListTile(
+                          tileColor: Colors.white,
+                          onTap: () async {
+                            setState(() {
+                              this.selectedIndex = index;
+                            });
+                            await AppIdPreferences.setId(selectedIndex);
+                            if (selectedIndex == 4) {
+                              setState(() {
+                                _enabled = true;
+                              });
+                            } else {
+                              setState(() {
+                                _enabled = false;
+                                this.customApp = '';
+                                _controller.text = '';
+                              });
+                              await AppIdPreferences.setCustomId('');
+                              _controller.addListener(() {
+                                setState(() {});
+                              });
+                            }
+                          },
+                          selected: apps[index].selected,
+                          title: Text(apps[index].title),
+                          trailing: (selectedIndex == index)
+                              ? Icon(Icons.check, color: Colors.blueAccent)
+                              : null,
+                        ),
+                        Divider(
+                          height: 1,
+                          thickness: 2,
+                        ),
+                      ],
+                    ),
+                  );
+                }),
+              ),
+              SizedBox(height: 20),
+              Container(
+                color: Color(0xffffffff),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    SizedBox(
+                      width: 15.0,
+                    ),
+                    Text(
+                      'Custom App Id',
+                      style: TextStyle(fontSize: 17),
+                    ),
+                    SizedBox(
+                      width: 15.0,
+                    ),
+                    Expanded(
+                      child: TextField(
+                        controller: _controller,
+                        enabled: _enabled,
+                        decoration: InputDecoration(
+                          hintText: "External App Id",
+                          border: InputBorder.none,
+                          suffixIcon: _controller.text.isEmpty
+                              ? Container(
+                                  width: 0,
+                                )
+                              : IconButton(
+                                  icon: Icon(Icons.check),
+                                  onPressed: () async {
+                                    FocusScope.of(context)
+                                        .requestFocus(FocusNode());
+                                    setState(() {
+                                      this.customApp = customApp;
+                                    });
+                                    await AppIdPreferences.setCustomId(
+                                        customApp);
+                                  },
+                                ),
+                        ),
+                        onChanged: (customApp) =>
+                            setState(() => this.customApp = customApp),
+                      ),
+                    ),
+                  ],
+                ),
+              )
+            ],
+          ),
         ),
       ),
     );

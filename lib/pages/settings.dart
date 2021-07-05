@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:mep_issuer/pages/app_id.dart';
+import 'package:mep_issuer/res/strings.dart';
 import 'package:mep_issuer/pages/environment.dart';
+import 'package:mep_issuer/res/dimens.dart';
+import 'package:mep_issuer/widgets/listview_row.dart';
 import 'package:mep_issuer/pages/provisioning_sdk.dart';
+import 'package:mep_issuer/res/colors.dart';
 import 'package:mep_issuer/pages/card_info_display_sdk.dart';
 
 class SettingsPage extends StatefulWidget {
@@ -17,90 +21,47 @@ class _SettingsPageState extends State<SettingsPage> {
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
-        title: Text('Settings'),
-        backgroundColor: Color(0xFFF2F2F7),
+        title: Text('$settingsScreen'),
         actions: <Widget>[
           FlatButton(
             onPressed: () {
               Navigator.of(context).pop();
             },
             child: Text(
-              'Done',
+              '$settingsButtonText',
+              style: TextStyle(color: settingsScreenButton),
             ),
           )
         ],
       ),
       body: Container(
-        padding: EdgeInsets.only(top: 25),
-        color: Color(0xfff2f2f7),
+        padding: EdgeInsets.symmetric(horizontal: horizontalPadding),
         child: ListView(
           children: [
-            Row(
-              children: [
-                SizedBox(
-                  width: 14,
-                ),
-                Text('COMMON'),
-              ],
+            CustomRowHeader(
+              title: '$commonSettingsHeader',
             ),
-            Divider(
-              height: 1,
-              thickness: 2,
+            CustomRow(
+              title: '$commonSettingsRow1',
+              onTap: AppId(),
             ),
-            buildSettingsRow('App Id', () => AppId()),
-            buildSettingsRow('Environment', () => Environment()),
-            SizedBox(
-              height: 20,
+            CustomRow(
+              title: '$commonSettingsRow2',
+              onTap: Environment(),
             ),
-            Row(
-              children: [
-                SizedBox(
-                  width: 14,
-                ),
-                Text('FEATURES'),
-              ],
+            CustomRowHeader(
+              title: '$featuresHeader',
             ),
-            Divider(
-              height: 1,
-              thickness: 2,
+            CustomRow(
+              title: '$featuresRow1',
+              onTap: ProvisioningSDK(),
             ),
-            buildSettingsRow('Provisioning SDK', () => ProvisioningSDK()),
-            buildSettingsRow(
-                'Card info Display SDK', () => CardInfoDisplaySDK()),
+            CustomRow(
+              title: '$featuresRow2',
+              onTap: CardInfoDisplaySDK(),
+            ),
           ],
         ),
-      ),
-    );
-  }
-
-  Container buildSettingsRow(String title, Widget Function() createPage) {
-    return Container(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: [
-          ListTile(
-            tileColor: Colors.white,
-            onTap: () {
-              Navigator.of(context).push(MaterialPageRoute(
-                  builder: (BuildContext context) => createPage()));
-            },
-            title: Text(
-              '$title',
-              style: TextStyle(
-                fontSize: 18,
-              ),
-            ),
-            trailing: Icon(
-              Icons.arrow_forward_ios,
-              color: Colors.black54,
-            ),
-          ),
-          Divider(
-            height: 1,
-            thickness: 2,
-          ),
-        ],
-        // child:
       ),
     );
   }

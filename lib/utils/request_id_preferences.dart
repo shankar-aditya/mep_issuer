@@ -7,10 +7,10 @@ class RequestIdPreferences {
       _preferences = await SharedPreferences.getInstance();
 
   static Future setRequestId(String id) async =>
-      await _preferences.setString('_idRequest', id);
+      await _preferences.setString('requestIdPreferences', id);
 
   static String getRequestId() {
-    final myId = _preferences.getString("_idRequest") ?? '';
+    final myId = _preferences.getString('requestIdPreferences') ?? '';
     return myId;
   }
 }

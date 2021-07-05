@@ -2,22 +2,22 @@ import 'package:flutter/material.dart';
 import 'package:mep_issuer/res/constants.dart';
 import 'package:mep_issuer/res/dimens.dart';
 import 'package:mep_issuer/res/strings.dart';
+import 'package:mep_issuer/utils/card_no_preferences_pro_sdk.dart';
 import 'package:mep_issuer/widgets/form_row.dart';
 import 'package:mep_issuer/widgets/back_button.dart';
 import 'package:mep_issuer/widgets/listview_row.dart';
 import 'package:mep_issuer/widgets/custom_button.dart';
 import 'package:mep_issuer/models/card_number_info.dart';
-import 'package:mep_issuer/utils/card_no_preferences.dart';
 
-class CardNumber extends StatefulWidget {
-  CardNumber({Key key}) : super(key: key);
+class CardNumberProSdk extends StatefulWidget {
+  CardNumberProSdk({Key key}) : super(key: key);
 
   @override
   _CardNumberState createState() => _CardNumberState();
 }
 
-class _CardNumberState extends State<CardNumber> {
-  final _preferenceService = CardNoPreferences();
+class _CardNumberState extends State<CardNumberProSdk> {
+  final _preferenceService = CardNoPreferencesProSdk();
 
   @override
   void initState() {

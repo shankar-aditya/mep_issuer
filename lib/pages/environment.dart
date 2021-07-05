@@ -1,4 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:mep_issuer/res/strings.dart';
+import 'package:mep_issuer/models/app_class.dart';
+import 'package:mep_issuer/res/dimens.dart';
+import 'package:mep_issuer/widgets/back_button.dart';
+import 'package:mep_issuer/widgets/listview_row.dart';
 import 'package:mep_issuer/utils/user_env_preferences.dart';
 
 class Environment extends StatefulWidget {
@@ -9,14 +14,14 @@ class Environment extends StatefulWidget {
 }
 
 class _EnvironmentState extends State<Environment> {
-  List<Env> env = <Env>[
-    Env(0, 'OFFLINE'),
-    Env(1, 'VBOX460'),
-    Env(2, 'VBOX522'),
-    Env(3, 'VBOX538'),
-    Env(4, 'AACERT'),
-    Env(5, 'SANDBOX'),
-    Env(6, 'PRODUCTION')
+  List<Data> env = <Data>[
+    Data(0, '$environmentRow1'),
+    Data(1, '$environmentRow2'),
+    Data(2, '$environmentRow3'),
+    Data(3, '$environmentRow4'),
+    Data(4, '$environmentRow5'),
+    Data(5, '$environmentRow6'),
+    Data(6, '$environmentRow7')
   ];
 
   int selectedIndex;
@@ -26,121 +31,53 @@ class _EnvironmentState extends State<Environment> {
   void initState() {
     super.initState();
 
-    result = UserEnvPreferences.getEnv() ?? '';
     selectedIndex = UserEnvPreferences.getInd() ?? -1;
+    if (selectedIndex != -1) {
+      result = env.elementAt(selectedIndex).title;
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        leading: FlatButton(
-          onPressed: () {
-            Navigator.of(context).pop();
-          },
-          child: Row(
-            children: [
-              Icon(Icons.arrow_back_ios),
-            ],
-          ),
-        ),
+        leading: CustomBackButton(),
         centerTitle: true,
         title: Text(
-          'Environment',
+          '$environmentScreen',
         ),
-        backgroundColor: Color(0xFFF2F2F7),
       ),
       body: Container(
-        padding: EdgeInsets.only(top: 25),
-        color: Color(0xfff2f2f7),
-        child: ListView(
-          physics: NeverScrollableScrollPhysics(),
+        padding: EdgeInsets.symmetric(
+            horizontal: horizontalPadding, vertical: verticalPadding),
+        child: Column(
           children: [
-            ListView(
-              shrinkWrap: true,
-              physics: NeverScrollableScrollPhysics(),
-              children: [
-                Divider(
-                  height: 1,
-                  thickness: 2,
-                ),
-                Container(
-                  color: Colors.white,
-                  padding:
-                      EdgeInsets.only(top: 10, bottom: 10, right: 15, left: 15),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        'Selected',
-                        style: TextStyle(fontSize: 18),
-                      ),
-                      Text(
-                        '$result',
-                        style: TextStyle(fontSize: 15),
-                      ),
-                    ],
-                  ),
-                ),
-              ],
+            CustomRowWithText(
+              title: selected,
+              subtitle: result,
             ),
-            Divider(
-              height: 1,
-              thickness: 2,
+            Container(
+              padding: EdgeInsets.only(
+                  top: infoTopPadding,
+                  bottom: infoBottomPadding,
+                  left: infoLeftPadding),
+              child: Text("$environmentInfoMessage"),
             ),
-            SizedBox(
-              height: 30,
-            ),
-            Text(
-                "Changing this will restart the app upon leaving the dev dashboard."),
-            Divider(
-              height: 1,
-              thickness: 2,
-            ),
-            ListView(
-              shrinkWrap: true,
-              physics: NeverScrollableScrollPhysics(),
-              children: List.generate(env.length, (index) {
-                return Container(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      ListTile(
-                        tileColor: Colors.white,
-                        onTap: () async {
-                          setState(() {
-                            this.selectedIndex = index;
-                            this.result = env[selectedIndex].title;
-                          });
-                          await UserEnvPreferences.setEnv(result);
-                          await UserEnvPreferences.setInd(selectedIndex);
-                        },
-                        selected: env[index].selected,
-                        title: Text(env[index].title),
-                        trailing: (selectedIndex == index)
-                            ? Icon(Icons.check, color: Colors.blueAccent)
-                            : null,
-                      ),
-                      Divider(
-                        height: 1,
-                        thickness: 2,
-                      ),
-                    ],
-                  ),
-                );
-              }),
+            SelectRow(
+              row: env,
+              selectedIndex: selectedIndex,
+              onTapAlso: (selectedIndex) async {
+                setState(() {
+                  this.selectedIndex = selectedIndex;
+                  this.result = env[selectedIndex].title;
+                });
+                await UserEnvPreferences.setInd(selectedIndex);
+                await UserEnvPreferences.setEnvName(result);
+              },
             ),
           ],
         ),
       ),
     );
   }
-}
-
-class Env {
-  final int id;
-  final String title;
-  bool selected = false;
-
-  Env(this.id, this.title);
 }

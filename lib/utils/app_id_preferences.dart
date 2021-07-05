@@ -6,19 +6,17 @@ class AppIdPreferences {
   static Future init() async =>
       _preferences = await SharedPreferences.getInstance();
 
-  static Future setId(int index) async =>
-      await _preferences.setInt('_id', index);
+  static Future setAppId(int index) async =>
+      await _preferences.setInt('appIdPreferences', index);
 
-  static Future setCustomId(String idc) async =>
-      await _preferences.setString('_idCustom', idc);
-
-  static int getId() {
-    final myInt = _preferences.getInt("_id") ?? -1;
+  static int getAppId() {
+    final myInt = _preferences.getInt('appIdPreferences') ?? -1;
     return myInt;
   }
-
-  static String getCustomId() {
-    final myId = _preferences.getString("_idCustom") ?? '';
+  static Future setAppIdName(String idc) async =>
+      await _preferences.setString('appIdName', idc);
+  static String getAppIdName() {
+    final myId = _preferences.getString("appIdName") ?? '';
     return myId;
   }
 }

@@ -1,7 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:mep_issuer/res/dimens.dart';
+import 'package:mep_issuer/res/strings.dart';
 import 'package:mep_issuer/pages/card_id.dart';
+import 'package:mep_issuer/models/app_class.dart';
 import 'package:mep_issuer/pages/card_number.dart';
+import 'package:mep_issuer/widgets/back_button.dart';
+import 'package:mep_issuer/widgets/listview_row.dart';
 import 'package:mep_issuer/utils/card_preferences.dart';
+import 'package:mep_issuer/utils/timestamp_preferences.dart';
 import 'package:mep_issuer/utils/request_id_preferences.dart';
 
 class CardInfoDisplaySDK extends StatefulWidget {
@@ -12,19 +18,19 @@ class CardInfoDisplaySDK extends StatefulWidget {
 }
 
 class _CardInfoDisplaySDKState extends State<CardInfoDisplaySDK> {
-  List<Psdk> row = <Psdk>[
-    Psdk(0, 'Card Number'),
-    Psdk(1, 'Card Id'),
+  List<Data> row = <Data>[
+    Data(0, '$cardInfoEntryRow1'),
+    Data(1, '$cardInfoEntryRow2'),
   ];
 
-  List<SetUp> row2 = <SetUp>[
-    SetUp(0, 'Visa SDK'),
-    SetUp(1, 'Mobile App'),
+  List<Data> row2 = <Data>[
+    Data(0, '$setUpRow1'),
+    Data(1, '$setUpRow2'),
   ];
 
-  List<Verification> row3 = <Verification>[
-    Verification(0, 'OTP'),
-    Verification(1, 'None'),
+  List<Data> row3 = <Data>[
+    Data(0, '$verificationRow1'),
+    Data(1, '$verificationRow2'),
   ];
 
   int selectedIndex;
@@ -32,25 +38,29 @@ class _CardInfoDisplaySDKState extends State<CardInfoDisplaySDK> {
   int selectedVerificationIndex;
 
   String requestId = '';
+  String timeStamp = '';
 
   TextEditingController _controller = new TextEditingController();
-
-  bool _enabledCardId = false;
-  bool _enabledCardNo = false;
+  TextEditingController _timeStampController = new TextEditingController();
 
   @override
   void initState() {
     super.initState();
     selectedIndex = (CardPreferences.getId() ?? -1);
-    selectedSetUpIndex = (CardPreferences.getSetUpId() ?? -1);
+    selectedSetUpIndex = (CardPreferences.getStepUpId() ?? -1);
     selectedVerificationIndex = (CardPreferences.getVerificationId() ?? -1);
     requestId = RequestIdPreferences.getRequestId() ?? '';
+    timeStamp = TimeStampPreferences.getTime() ?? 0;
 
     setState(() {
       _controller.text = requestId;
+      _timeStampController.text = timeStamp;
     });
 
     _controller.addListener(() {
+      setState(() {});
+    });
+    _timeStampController.addListener(() {
       setState(() {});
     });
   }
@@ -61,300 +71,96 @@ class _CardInfoDisplaySDKState extends State<CardInfoDisplaySDK> {
       onTap: () => FocusScope.of(context).requestFocus(FocusNode()),
       child: Scaffold(
         appBar: AppBar(
-          leading: FlatButton(
-            onPressed: () {
-              Navigator.of(context).pop();
-            },
-            child: Row(
-              children: [
-                Icon(Icons.arrow_back_ios),
-                // Text('Settings'),
-              ],
-            ),
-          ),
+          leading: CustomBackButton(),
           centerTitle: true,
           title: Text(
-            'Card Info Display SDK',
+            '$cardInfoSdkScreen',
           ),
-          backgroundColor: Color(0xFFF2F2F7),
         ),
         body: Container(
-          padding: EdgeInsets.only(top: 25),
-          color: Color(0xfff2f2f7),
+          padding: EdgeInsets.symmetric(horizontal: horizontalPadding),
           child: ListView(
-            // physics: NeverScrollableScrollPhysics(),
             children: [
-              // SizedBox(
-              //   child: Text('DATA ENTRY MODE'),
-              //   height: 30,
-              // ),
-              Container(
-                padding: EdgeInsets.only(left: 15, bottom: 10),
-                child: Text('DATA ENTRY MODE'),
+              CustomRowHeader(
+                title: '$entryModeInfo',
               ),
-              Divider(
-                height: 1,
-                thickness: 2,
+              SelectRow(
+                row: row,
+                selectedIndex: selectedIndex,
+                onTapAlso: (selectedIndex) async {
+                  setState(() {
+                    this.selectedIndex = selectedIndex;
+                  });
+                  await CardPreferences.setId(selectedIndex);
+                  await CardPreferences.setCardDisplayEntryMode(row.elementAt(selectedIndex).title);
+                },
               ),
-              ListView(
-                shrinkWrap: true,
-                physics: NeverScrollableScrollPhysics(),
-                children: List.generate(row.length, (index) {
-                  return ListTile(
-                    tileColor: Colors.white,
-                    onTap: () async {
-                      setState(() {
-                        this.selectedIndex = index;
-                        if (selectedIndex == 1) {
-                          _enabledCardId = true;
-                          _enabledCardNo = false;
-                        } else {
-                          _enabledCardId = false;
-                          _enabledCardNo = true;
-                        }
-                      });
-                      await CardPreferences.setId(selectedIndex);
-                    },
-                    selected: row[index].selected,
-                    title: Text(row[index].title),
-                    trailing: (selectedIndex == index)
-                        ? Icon(Icons.check, color: Colors.blueAccent)
-                        : null,
-                  );
-                }),
+              CustomRowHeader(
+                title: '$detailsInfo',
               ),
-              Divider(
-                height: 1,
-                thickness: 2,
+              CustomRow(
+                title: '$cardInfoEntryRow2',
+                onTap: CardId(),
               ),
-              Container(
-                padding: EdgeInsets.only(left: 15, bottom: 10, top: 10),
-                child: Text('ENTER DETAILS'),
+              CustomRow(
+                title: '$cardInfoEntryRow1',
+                onTap: CardNumber(),
               ),
-              Divider(
-                height: 1,
-                thickness: 2,
+              CustomRowHeader(
+                title: '$setUpHeader',
               ),
-              buildSettingsRow(
-                  'Card Id', () => CardId(), context, _enabledCardId),
-              buildSettingsRow(
-                  'Card Number', () => CardNumber(), context, _enabledCardNo),
-              Divider(
-                height: 1,
-                thickness: 2,
+              SelectRow(
+                row: row2,
+                selectedIndex: selectedSetUpIndex,
+                onTapAlso: (selectedIndex) async {
+                  await CardPreferences.setStepUpId(selectedIndex);
+                  await CardPreferences.setStepUpIdName(row2.elementAt(selectedIndex).title);
+                },
               ),
-              Container(
-                padding: EdgeInsets.only(left: 15, bottom: 10, top: 10),
-                child: Text('STEP UP TYPE'),
+              CustomRowHeader(
+                title: '$verificationHeader',
               ),
-              Divider(
-                height: 1,
-                thickness: 2,
+              SelectRow(
+                row: row3,
+                selectedIndex: selectedVerificationIndex,
+                onTapAlso: (selectedVerificationIndex) async {
+                  await CardPreferences.setVerificationId(
+                      selectedVerificationIndex);
+                },
               ),
-              ListView(
-                shrinkWrap: true,
-                physics: NeverScrollableScrollPhysics(),
-                children: List.generate(row2.length, (index) {
-                  return ListTile(
-                    tileColor: Colors.white,
-                    onTap: () async {
-                      setState(() {
-                        this.selectedSetUpIndex = index;
-                      });
-                      await CardPreferences.setSetUpId(selectedSetUpIndex);
-                    },
-                    selected: row2[index].selected,
-                    title: Text(row2[index].title),
-                    trailing: (selectedSetUpIndex == index)
-                        ? Icon(Icons.check, color: Colors.blueAccent)
-                        : null,
-                  );
-                }),
+              CustomTextField(
+                header: '$timeStampHeader',
+                title: '$timeStampTitle',
+                hintText: '$timeStampHint',
+                controller: _timeStampController,
+                onChangedSave: (time) async {
+                  setState(() {
+                    this.timeStamp = time;
+                  });
+                  await TimeStampPreferences.setTime(this.timeStamp);
+                },
+                description: '$timeStampMessage',
               ),
-              Divider(
-                height: 1,
-                thickness: 2,
+              CustomTextField(
+                header: '$requestedIdHeader',
+                title: '$requestedIdTitle',
+                hintText: '$requestedIdHint',
+                controller: _controller,
+                onChangedSave: (text) async {
+                  setState(() {
+                    this.requestId = text;
+                  });
+                  await RequestIdPreferences.setRequestId(text);
+                },
+                description: '$requestedIdMessage',
               ),
-              Container(
-                padding: EdgeInsets.only(left: 15, bottom: 10, top: 10),
-                child: Text('CARD OWNER VERIFICATION METHOD'),
-              ),
-              Divider(
-                height: 1,
-                thickness: 2,
-              ),
-              ListView(
-                shrinkWrap: true,
-                physics: NeverScrollableScrollPhysics(),
-                children: List.generate(row3.length, (index) {
-                  return ListTile(
-                    tileColor: Colors.white,
-                    onTap: () async {
-                      setState(() {
-                        this.selectedVerificationIndex = index;
-                      });
-                      await CardPreferences.setVerificationId(
-                          selectedVerificationIndex);
-                    },
-                    selected: row3[index].selected,
-                    title: Text(row3[index].title),
-                    trailing: (selectedVerificationIndex == index)
-                        ? Icon(Icons.check, color: Colors.blueAccent)
-                        : null,
-                  );
-                }),
-              ),
-              Divider(
-                height: 1,
-                thickness: 2,
-              ),
-              Container(
-                padding: EdgeInsets.only(left: 15, bottom: 10, top: 10),
-                child: Text('SECONDS'),
-              ),
-              Divider(
-                height: 1,
-                thickness: 2,
-              ),
-              Container(
-                padding: EdgeInsets.only(left: 15, bottom: 0),
-                color: Colors.white,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    Text('Card Owner Verified At'),
-                    SizedBox(
-                      width: 10.0,
-                    ),
-                    Expanded(
-                      child: TextField(
-                        enabled: false,
-                        decoration: InputDecoration(
-                          hintText: "Minus times in seconds",
-                          border: InputBorder.none,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              Divider(
-                height: 1,
-                thickness: 2,
-              ),
-              Container(
-                padding: EdgeInsets.only(left: 15, bottom: 0),
-                child: Text(
-                    'Entered value will be minus (-) with current timestamp'),
-              ),
-
-              Container(
-                padding: EdgeInsets.only(left: 15, bottom: 10, top: 10),
-                child: Text('REQUEST ID'),
-              ),
-              Divider(
-                height: 1,
-                thickness: 2,
-              ),
-              Container(
-                padding: EdgeInsets.only(left: 15, bottom: 0),
-                color: Colors.white,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    Text('Request ID'),
-                    SizedBox(
-                      width: 10.0,
-                    ),
-                    Expanded(
-                      child: TextField(
-                        controller: _controller,
-                        decoration: InputDecoration(
-                          hintText: 'Request ID',
-                          border: InputBorder.none,
-                          // _controller.text.isEmpty
-                          //     ? Container(
-                          //         width: 0,
-                          //       )
-                          //     :
-                          suffixIcon: IconButton(
-                            icon: Icon(Icons.check),
-                            onPressed: () async {
-                              setState(() {
-                                this.requestId = requestId;
-                              });
-                              await RequestIdPreferences.setRequestId(
-                                  requestId);
-                            },
-                          ),
-                        ),
-                        onChanged: (requestId) => setState(
-                          () => this.requestId = requestId,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              Divider(
-                height: 1,
-                thickness: 2,
-              ),
-              Container(
-                padding: EdgeInsets.only(left: 15, bottom: 25),
-                child: Text(
-                    'Entered value will be used in Mobile type Step up flow'),
-              ),
+              SizedBox(
+                height: sizedBoxHeight,
+              )
             ],
           ),
         ),
       ),
     );
   }
-}
-
-class Psdk {
-  final int id;
-  final String title;
-  bool selected = false;
-
-  Psdk(this.id, this.title);
-}
-
-class SetUp {
-  final int id;
-  final String title;
-  bool selected = false;
-
-  SetUp(this.id, this.title);
-}
-
-class Verification {
-  final int id;
-  final String title;
-  bool selected = false;
-
-  Verification(this.id, this.title);
-}
-
-ListTile buildSettingsRow(String title, Widget Function() createPage,
-    BuildContext context, bool _enabled) {
-  return ListTile(
-    tileColor: Colors.white,
-    onTap: () {
-      if (_enabled == true)
-        Navigator.of(context).push(
-            MaterialPageRoute(builder: (BuildContext context) => createPage()));
-    },
-    title: Text(
-      title,
-      style: TextStyle(
-        fontSize: 18,
-      ),
-    ),
-    trailing: Icon(
-      Icons.arrow_forward_ios,
-      color: Colors.black54,
-    ),
-  );
 }

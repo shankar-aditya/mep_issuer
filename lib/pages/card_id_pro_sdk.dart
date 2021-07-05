@@ -2,22 +2,22 @@ import 'package:flutter/material.dart';
 import 'package:mep_issuer/res/dimens.dart';
 import 'package:mep_issuer/res/strings.dart';
 import 'package:mep_issuer/res/constants.dart';
+import 'package:mep_issuer/utils/card_id_preferences_pro_sdk.dart';
 import 'package:mep_issuer/widgets/form_row.dart';
 import 'package:mep_issuer/widgets/back_button.dart';
 import 'package:mep_issuer/widgets/listview_row.dart';
 import 'package:mep_issuer/widgets/custom_button.dart';
 import 'package:mep_issuer/models/card_number_info.dart';
-import 'package:mep_issuer/utils/card_id_preferences.dart';
 
-class CardId extends StatefulWidget {
-  CardId({Key key}) : super(key: key);
+class CardIdProSdk extends StatefulWidget {
+  CardIdProSdk({Key key}) : super(key: key);
 
   @override
   _CardIdState createState() => _CardIdState();
 }
 
-class _CardIdState extends State<CardId> {
-  final _preferenceService = CardIdPreferences();
+class _CardIdState extends State<CardIdProSdk> {
+  final _preferenceServiceProSdk = CardIdPreferencesProSdk();
 
   @override
   void initState() {
@@ -30,7 +30,7 @@ class _CardIdState extends State<CardId> {
   TextEditingController _providerController = TextEditingController();
 
   void _populateFields() async {
-    final cardIdNew = await _preferenceService.getInfo();
+    final cardIdNew = await _preferenceServiceProSdk.getInfo();
     setState(() {
       _cardIdController.text = cardIdNew.cardId;
       _sourceController.text = cardIdNew.source;
@@ -93,22 +93,23 @@ class _CardIdState extends State<CardId> {
 
 //
   void _saveCardId() {
-    final newCardId = CardIdInfo(
+    final newCardIdProSdk = CardIdInfo(
         cardId: _cardIdController.text,
         source: _sourceController.text,
         provider: _providerController.text);
 
-    _preferenceService.saveCardId(newCardId);
+    _preferenceServiceProSdk.saveCardId(newCardIdProSdk);
   }
 
   void _restorCardId() {
-    final newCardId = CardIdInfo(
+    final newCardIdProSdk = CardIdInfo(
       cardId: cardIdDefault,
       source: sourceDefault,
       provider: providerDefault,
     );
+    print(newCardIdProSdk.cardId);
 
-    _preferenceService.saveCardId(newCardId);
+    _preferenceServiceProSdk.saveCardId(newCardIdProSdk);
 
     setState(() {
       _cardIdController.text = cardIdDefault;

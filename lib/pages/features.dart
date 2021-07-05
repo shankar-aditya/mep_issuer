@@ -1,4 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:mep_issuer/pages/pro_sdk_native_display.dart';
+import 'package:mep_issuer/res/strings.dart';
+import 'package:mep_issuer/res/dimens.dart';
+import 'package:mep_issuer/widgets/back_button.dart';
+import 'package:mep_issuer/widgets/listview_row.dart';
+
+import 'card_native_display_sdk.dart';
 
 class FeaturesHome extends StatefulWidget {
   FeaturesHome({Key key}) : super(key: key);
@@ -12,85 +19,30 @@ class _FeaturesHomeState extends State<FeaturesHome> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        leading: FlatButton(
-          onPressed: () {
-            Navigator.of(context).pop();
-          },
-          child: Row(
-            children: [
-              Icon(Icons.arrow_back_ios),
-              // Text('MEP Issuer'),
-            ],
-          ),
-        ),
+        leading: CustomBackButton(),
         centerTitle: true,
         title: Text(
-          'FDNB BANK',
+          '$issuerName',
         ),
-        backgroundColor: Color(0xFFF2F2F7),
       ),
       body: Container(
-        color: Color(0xfff2f2f7),
-        // padding: EdgeInsets.only(left: 16, top: 25, right: 16),
+        padding: EdgeInsets.symmetric(
+            horizontal: horizontalPadding, vertical: verticalPadding),
         child: ListView(
-          physics: NeverScrollableScrollPhysics(),
           children: [
             Image(image: AssetImage('assets/images/Assembled.png')),
-            Row(
-              children: [
-                SizedBox(
-                  width: 18,
-                ),
-                Text('Features', style: TextStyle(fontSize: 18)),
-              ],
+            CustomRowHeader(
+              title: '$featuresHeader',
             ),
-            Divider(
-              height: 1,
-              thickness: 2,
+            CustomListTile(
+              title: '$issuerFeature1',
+              subtitle: '$issuerFeature1Details',
+              onTap: ProSdkNativeDisplay(),
             ),
-            ListTile(
-              tileColor: Colors.white,
-              leading: CircleAvatar(
-                backgroundImage: AssetImage('assets/images/icon_feature.jpg'),
-              ),
-              title: Text(
-                'Digital Wallet',
-                style: TextStyle(
-                  color: Color(0xff000000),
-                ),
-              ),
-              subtitle: Text('Link your card to pay in-store'),
-              trailing: Icon(
-                Icons.arrow_forward_ios,
-                color: Color(0xff000000),
-              ),
-              onTap: () {},
-            ),
-            Divider(
-              height: 1,
-              thickness: 2,
-            ),
-            ListTile(
-              tileColor: Colors.white,
-              leading: CircleAvatar(
-                backgroundImage: AssetImage('assets/images/icon_feature.jpg'),
-              ),
-              title: Text(
-                'Display Card UI',
-                style: TextStyle(
-                  color: Color(0xff000000),
-                ),
-              ),
-              subtitle: Text('View your card information'),
-              trailing: Icon(
-                Icons.arrow_forward_ios,
-                color: Color(0xff000000),
-              ),
-              onTap: () {},
-            ),
-            Divider(
-              height: 1,
-              thickness: 2,
+            CustomListTile(
+              title: '$issuerFeature2',
+              subtitle: '$issuerFeature2Details',
+              onTap: CardSdkNativeDisplay(),
             ),
           ],
         ),

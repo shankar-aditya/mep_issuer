@@ -26,7 +26,7 @@ class _ProvisioningSDKState extends State<ProvisioningSDK> {
   @override
   void initState() {
     super.initState();
-    selectedIndex = CardPreferences.getProSdkId() ?? -1;
+    selectedIndex = CardPreferences.getProSdkId() ?? 0 ;
   }
 
   @override

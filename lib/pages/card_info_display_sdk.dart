@@ -46,11 +46,11 @@ class _CardInfoDisplaySDKState extends State<CardInfoDisplaySDK> {
   @override
   void initState() {
     super.initState();
-    selectedIndex = (CardPreferences.getId() ?? -1);
-    selectedSetUpIndex = (CardPreferences.getStepUpId() ?? -1);
-    selectedVerificationIndex = (CardPreferences.getVerificationId() ?? -1);
+    selectedIndex = (CardPreferences.getId() ?? 0);
+    selectedSetUpIndex = (CardPreferences.getStepUpId() ?? 0);
+    selectedVerificationIndex = (CardPreferences.getVerificationId() ?? 0);
     requestId = RequestIdPreferences.getRequestId() ?? '';
-    timeStamp = TimeStampPreferences.getTime() ?? 0;
+    timeStamp = TimeStampPreferences.getTime() ?? '';
 
     setState(() {
       _controller.text = requestId;

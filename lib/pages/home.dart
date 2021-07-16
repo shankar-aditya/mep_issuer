@@ -18,7 +18,6 @@ class _HomeState extends State<Home> {
     {
       return Scaffold(
         appBar: AppBar(
-          title: Text('$appTitle'),
           actions: <Widget>[
             IconButton(
               icon: Icon(Icons.settings),
@@ -30,74 +29,66 @@ class _HomeState extends State<Home> {
           ],
         ),
         body: Container(
-          padding: EdgeInsets.symmetric(horizontal: paddingHomeButton),
+          padding: EdgeInsets.all(horizontalPadding),
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.stretch,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.max,
+            mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              FlatButton(
-                onPressed: () {
-                  Navigator.of(context).push(MaterialPageRoute(
-                      builder: (BuildContext context) => FeaturesHome()));
-                },
-                color: homeButtonColor,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      '$homeButton',
-                      style: TextStyle(fontSize: homeButtonFontSize),
-                    ),
-                   SizedBox(width: 30,),
-                   Icon(Icons.apps, size: 35,)
-                  ],
+              Image(image:
+                AssetImage('assets/images/landing_screen_logo.png'),
+                width: 120,
+                height: 120
+              ),
+              Container(
+                padding: EdgeInsets.symmetric(vertical: 10),
+                child: Text('Welcome to \nMEP Issuer App',
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 30,
+                  ),
                 ),
-                height: homeButtonHeight,
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(borderRadius)),
+
+              ),
+              Container(
+                padding: EdgeInsets.symmetric(vertical: 10),
+                child: Text('It\'s a fast and simple way to integrate and test your SDK.'),
+              ),
+              Container(
+                margin: EdgeInsets.symmetric(vertical: 100),
+                decoration: BoxDecoration(
+                  color: backgroundColor,
+                  borderRadius: BorderRadius.all(Radius.circular(
+                          borderRadius) //              <--- border radius here
+                      ),
+                ),
+                child: ListTile(
+                  onTap: () {
+                    Navigator.of(context).push(MaterialPageRoute(
+                        builder: (BuildContext context) => FeaturesHome()));
+                  },
+                  leading: CircleAvatar(
+                    backgroundImage:
+                        AssetImage('assets/images/icon_feature.jpg'),
+                  ),
+                  title: Text(
+                    homeButton,
+                    style: TextStyle(
+                      fontSize: homeButtonFontSize,
+                      color: listTileTextColor,
+                    ),
+                  ),
+                  subtitle: Text('VIAP SDKs'),
+                  trailing: Icon(
+                    Icons.arrow_forward_ios,
+                    color: nextIcon,
+                    size:12,
+                  ),
+                ),
               ),
             ],
           ),
         ),
-        //   body: Container(
-        //
-        //     padding: EdgeInsets.symmetric(horizontal: paddingHomeButton),
-        //     child: Column(
-        //       mainAxisAlignment: MainAxisAlignment.center,
-        //       crossAxisAlignment: CrossAxisAlignment.stretch,
-        //       children: [
-        //         Container(
-        //           decoration: BoxDecoration(
-        //             boxShadow: [BoxShadow(
-        //               offset: Offset(0,20),blurRadius: 30,color: Colors.black12
-        //             )],
-        //             color: Colors.white70,
-        //             borderRadius: BorderRadius.circular(22),
-        //           ),
-        //           child: Row(
-        //             children: <Widget>[
-        //               Container(
-        //                 padding: EdgeInsets.symmetric(vertical: 15, horizontal: 80),
-        //                 height:60,
-        //                 width: 250,
-        //                 child: Text(homeButton,
-        //       style: TextStyle(fontSize: 1.1*homeButtonFontSize),),
-        //                 decoration: BoxDecoration(
-        //                   color: Colors.blue,
-        //                   borderRadius: BorderRadius.only(
-        //                     bottomLeft: Radius.circular(90),
-        //                     topLeft: Radius.circular(90),
-        //                     bottomRight: Radius.circular(200)
-        //                   )
-        //                 ),
-        //               ),
-        //               Icon(Icons.apps, size: 35,)
-        //             ],
-        //           ),
-        //         ),
-        //       ],
-        //     ),
-        //   )
       );
     }
   }

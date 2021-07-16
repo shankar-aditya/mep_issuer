@@ -31,7 +31,7 @@ class _EnvironmentState extends State<Environment> {
   void initState() {
     super.initState();
 
-    selectedIndex = UserEnvPreferences.getInd() ?? -1;
+    selectedIndex = UserEnvPreferences.getInd() ?? 0;
     if (selectedIndex != -1) {
       result = env.elementAt(selectedIndex).title;
     }

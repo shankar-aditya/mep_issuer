@@ -27,7 +27,7 @@ class _AppIdState extends State<AppId> {
   @override
   void initState() {
     super.initState();
-    selectedIndex = AppIdPreferences.getAppId() ?? -1;
+    selectedIndex = AppIdPreferences.getAppId() ?? 0;
     if (selectedIndex != -1) {
       result = apps.elementAt(selectedIndex).title;
     }

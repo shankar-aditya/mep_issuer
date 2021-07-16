@@ -10,7 +10,7 @@ class AppIdPreferences {
       await _preferences.setInt('appIdPreferences', index);
 
   static int getAppId() {
-    final myInt = _preferences.getInt('appIdPreferences') ?? -1;
+    final myInt = _preferences.getInt('appIdPreferences');
     return myInt;
   }
   static Future setAppIdName(String idc) async =>

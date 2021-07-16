@@ -10,7 +10,7 @@ class CardPreferences {
       await _preferences.setInt('entryModeProSdkPreferences', index);
 
   static int getProSdkId() {
-    final myInt = _preferences.getInt('entryModeProSdkPreferences') ?? -1;
+    final myInt = _preferences.getInt('entryModeProSdkPreferences');
     return myInt;
   }
 
@@ -25,7 +25,7 @@ class CardPreferences {
       await _preferences.setInt('entryModePreferences', index);
 
   static int getId() {
-    final myInt = _preferences.getInt('entryModePreferences') ?? -1;
+    final myInt = _preferences.getInt('entryModePreferences') ;
     return myInt;
   }
 
@@ -40,14 +40,14 @@ class CardPreferences {
       await _preferences.setInt('stepUpPreferences', index1);
 
   static int getStepUpId() {
-    final myInt1 = _preferences.getInt('stepUpPreferences') ?? -1;
+    final myInt1 = _preferences.getInt('stepUpPreferences');
     return myInt1;
   }
 
   static Future setStepUpIdName(String idc) async =>
       await _preferences.setString('stepUpPreferencesName', idc);
   static String getStepUpIdName() {
-    final myId = _preferences.getString("stepUpPreferencesName") ?? '';
+    final myId = _preferences.getString("stepUpPreferencesName")?? '';
     return myId;
   }
 
@@ -55,7 +55,7 @@ class CardPreferences {
       await _preferences.setInt('verificationPreferences', index2);
 
   static int getVerificationId() {
-    final myInt2 = _preferences.getInt('verificationPreferences') ?? -1;
+    final myInt2 = _preferences.getInt('verificationPreferences');
     return myInt2;
   }
 }

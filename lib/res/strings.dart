@@ -72,7 +72,6 @@ const String cardNoRow5 = 'State';
 const String cardNoRow6 = 'Postal Code';
 const String cardNoRow7 = 'Card Type';
 const String cardNoRow8 = 'Card Brand';
-
 const String cardNoRow1HintText = 'Card Number';
 const String cardNoRow2HintText = 'Expiry Date';
 const String cardNoRow3HintText = 'Address Line 1';

@@ -28,3 +28,4 @@ const double formLeftPadding = 15;
 const double buttonFontSize = 18;
 const double dividerThickness = 2;
 const double dividerHeight = 1;
+const double nextIconSize = 12;

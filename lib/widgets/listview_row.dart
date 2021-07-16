@@ -35,6 +35,7 @@ class CustomRow extends StatelessWidget {
         trailing: Icon(
           Icons.arrow_forward_ios,
           color: nextIcon,
+          size: nextIconSize,
         ),
       ),
     );
@@ -94,6 +95,7 @@ class CustomListTile extends StatelessWidget {
         trailing: Icon(
           Icons.arrow_forward_ios,
           color: nextIcon,
+          size: nextIconSize,
         ),
       ),
     );

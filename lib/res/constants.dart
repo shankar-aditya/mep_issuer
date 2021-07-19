@@ -1,8 +1,8 @@
 const String cardIdDefault = '38dbffd7-740f-4e5b-8f82-495bf9a9054c';
 const String sourceDefault = 'costco';
 const String providerDefault = 'DPS';
-const String cardNoDefault = '462294312XX54839';
-const String expiryDefault = '11-2X22';
+const String cardNoDefault = '4622943120054839';
+const String expiryDefault = '11-2022';
 const String addressDefault = '1004 NW 65th Ave';
 const String cityDefault = 'Miami';
 const String stateDefault = 'Florida';

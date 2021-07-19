@@ -25,9 +25,9 @@ class _CardIdState extends State<CardId> {
     _populateFields();
   }
 
-  TextEditingController _cardIdController = TextEditingController();
-  TextEditingController _sourceController = TextEditingController();
-  TextEditingController _providerController = TextEditingController();
+  TextEditingController _cardIdController = TextEditingController(text: cardIdDefault);
+  TextEditingController _sourceController = TextEditingController(text: sourceDefault);
+  TextEditingController _providerController = TextEditingController(text: providerDefault);
 
   void _populateFields() async {
     final cardIdNew = await _preferenceService.getInfo();

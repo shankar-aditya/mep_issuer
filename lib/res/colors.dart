@@ -10,3 +10,4 @@ const Color backgroundColor = Color(0xfff2f2f7);
 const Color listTileTextColor = Colors.black;
 const Color selectedColor = Colors.blueAccent;
 const Color buttonTextColor = Colors.blue;
+const Color backgroundColorHome = Colors.white;

@@ -25,14 +25,14 @@ class _CardNumberState extends State<CardNumber> {
     _populateFields();
   }
 
-  TextEditingController _cardNumberController = TextEditingController();
-  TextEditingController _expiryController = TextEditingController();
-  TextEditingController _addressController = TextEditingController();
-  TextEditingController _cityController = TextEditingController();
-  TextEditingController _stateController = TextEditingController();
-  TextEditingController _postalController = TextEditingController();
-  TextEditingController _cardTypeController = TextEditingController();
-  TextEditingController _cardBrandController = TextEditingController();
+  TextEditingController _cardNumberController = TextEditingController(text: cardNoDefault);
+  TextEditingController _expiryController = TextEditingController(text: expiryDefault);
+  TextEditingController _addressController = TextEditingController(text: addressDefault);
+  TextEditingController _cityController = TextEditingController(text: cityDefault);
+  TextEditingController _stateController = TextEditingController(text: stateDefault);
+  TextEditingController _postalController = TextEditingController(text: postalCodeDefault);
+  TextEditingController _cardTypeController = TextEditingController(text: typeDefault);
+  TextEditingController _cardBrandController = TextEditingController(text: brandDefault);
 
   void _populateFields() async {
     final cardNoNew = await _preferenceService.getInfo();

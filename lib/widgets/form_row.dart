@@ -18,7 +18,7 @@ class _FormRowState extends State<FormRow> {
   Widget build(BuildContext context) {
     return Container(
       color: backgroundColor,
-      padding: EdgeInsets.only(left: formLeftPadding),
+      padding: EdgeInsets.symmetric(horizontal: formLeftPadding),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.start,
         children: [

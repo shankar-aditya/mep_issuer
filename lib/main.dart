@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:mep_issuer/pages/home.dart';
+import 'package:mep_issuer/utils/card_no_preferences.dart';
 import 'package:mep_issuer/utils/card_preferences.dart';
 import 'package:mep_issuer/utils/app_id_preferences.dart';
 import 'package:mep_issuer/utils/user_env_preferences.dart';
@@ -17,6 +18,7 @@ Future main() async {
   HttpOverrides.global = new MyHttpOverrides();
   WidgetsFlutterBinding.ensureInitialized();
   await CardPreferences.init();
+  await CardNoPreferences.init();
   await AppIdPreferences.init();
   await UserEnvPreferences.init();
   await RequestIdPreferences.init();

@@ -3,6 +3,9 @@ import 'package:mep_issuer/pages/pro_sdk_native_display.dart';
 import 'package:mep_issuer/res/strings.dart';
 import 'package:mep_issuer/res/dimens.dart';
 import 'package:mep_issuer/pages/app_loader.dart';
+import 'package:mep_issuer/utils/app_id_preferences.dart';
+import 'package:mep_issuer/utils/card_no_preferences.dart';
+import 'package:mep_issuer/utils/user_env_preferences.dart';
 import 'package:mep_issuer/widgets/back_button.dart';
 import 'package:mep_issuer/widgets/listview_row.dart';
 import 'package:flutter/services.dart';
@@ -25,9 +28,41 @@ class _FeaturesHomeState extends State<FeaturesHome> {
   static const platform = const MethodChannel('com.visa.app.consolidatedissuerdemoapp/VIAPChannel');
   final GlobalKey<State> _keyLoader = new GlobalKey<State>();
 
+  String accountNumber;
+  String name;
+  String expiryTime;
+  String expiryMonth='';
+  String expiryYear='';
+  String nameOnAccount;
+  String cardType;
+  String cardBrand;
+  String appId;
+  String env;
+
   @override
   void initState() {
     super.initState();
+    accountNumber = CardNoPreferences.getAcNo();
+    name = CardNoPreferences.getName();
+    expiryTime = CardNoPreferences.getExp();
+    cardType = CardNoPreferences.getCardType();
+    cardBrand = CardNoPreferences.getCardBrand();
+    appId = AppIdPreferences.getAppIdName();
+    if(appId=='')
+      appId = appIdRow1;
+    env = UserEnvPreferences.getEnvName();
+    if(env=='')
+      env = environmentRow1;
+    if(expiryTime!=''){
+      if(expiryTime[1]=='-'){
+        expiryMonth = expiryTime[0];
+        expiryYear = expiryTime.substring(2);
+      }
+      else{
+        expiryMonth = expiryTime.substring(0,2);
+        expiryYear = expiryTime.substring(3);
+      }
+    }
     platform.setMethodCallHandler((call) {
       if (call.method.contains('showMessageMethod')) {
         appLoader.showMessage(call.arguments);
@@ -97,9 +132,10 @@ class _FeaturesHomeState extends State<FeaturesHome> {
     );
   }
 
+
   Future<void> _startSetup() async {
     try {
-      await platform.invokeMethod('startSetup');
+      await platform.invokeMethod('startSetup', {'appID': appId, 'env':env});
     } on PlatformException catch (e) {
       print("Failed: '${e.message}'.");
     }
@@ -128,12 +164,12 @@ class _FeaturesHomeState extends State<FeaturesHome> {
 
     Map<String, String> requestBody = {
     'encNonce': nounce,
-    'accountNumber': '4144775100095245',
-    'expirationMonth': '11',
-    'expiration Year': '2022',
-    'nameOnAccount': 'John Doe',
-    'cardType': 'Debit',
-    'cardBrand': 'Visa',
+    'accountNumber': accountNumber,
+    'expirationMonth': expiryMonth,
+    'expiration Year': expiryYear,
+    'nameOnAccount': name,
+    'cardType': cardType,
+    'cardBrand': cardBrand,
     };
 
     await http.post(

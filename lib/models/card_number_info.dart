@@ -1,5 +1,6 @@
 class CardNoInfo {
   final String cardnumber;
+  final String name;
   final String expirydate;
   final String address;
   final String city;
@@ -10,6 +11,7 @@ class CardNoInfo {
 
   CardNoInfo({
     this.cardnumber,
+    this.name,
     this.expirydate,
     this.address,
     this.city,

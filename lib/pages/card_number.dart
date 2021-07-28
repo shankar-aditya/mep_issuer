@@ -26,6 +26,7 @@ class _CardNumberState extends State<CardNumber> {
   }
 
   TextEditingController _cardNumberController = TextEditingController(text: cardNoDefault);
+  TextEditingController _nameController = TextEditingController(text: nameDefault);
   TextEditingController _expiryController = TextEditingController(text: expiryDefault);
   TextEditingController _addressController = TextEditingController(text: addressDefault);
   TextEditingController _cityController = TextEditingController(text: cityDefault);
@@ -38,6 +39,7 @@ class _CardNumberState extends State<CardNumber> {
     final cardNoNew = await _preferenceService.getInfo();
     setState(() {
       _cardNumberController.text = cardNoNew.cardnumber;
+      _nameController.text = cardNoNew.name;
       _expiryController.text = cardNoNew.expirydate;
       _addressController.text = cardNoNew.address;
       _cityController.text = cardNoNew.city;
@@ -69,6 +71,11 @@ class _CardNumberState extends State<CardNumber> {
               Divider(
                 height: dividerHeight,
                 thickness: dividerThickness,
+              ),
+              FormRow(
+                title: cardNoRow0,
+                hintText: cardNoRow0HintText,
+                controller: _nameController,
               ),
               FormRow(
                 title: cardNoRow1,
@@ -132,6 +139,7 @@ class _CardNumberState extends State<CardNumber> {
   void _saveCardNo() {
     final newCardNo = CardNoInfo(
         cardnumber: _cardNumberController.text,
+        name: _nameController.text,
         expirydate: _expiryController.text,
         address: _addressController.text,
         city: _cityController.text,
@@ -146,6 +154,7 @@ class _CardNumberState extends State<CardNumber> {
   void _restorCardNo() {
     final newCardNo = CardNoInfo(
         cardnumber: cardNoDefault,
+        name: nameDefault,
         expirydate: expiryDefault,
         address: addressDefault,
         city: cityDefault,
@@ -158,6 +167,7 @@ class _CardNumberState extends State<CardNumber> {
 
     setState(() {
       _cardNumberController.text = cardNoDefault;
+      _nameController.text = nameDefault;
       _expiryController.text = expiryDefault;
       _addressController.text = addressDefault;
       _cityController.text = cityDefault;

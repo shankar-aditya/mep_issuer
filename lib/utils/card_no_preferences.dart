@@ -2,10 +2,17 @@ import 'package:mep_issuer/models/card_number_info.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class CardNoPreferences {
+
+  static SharedPreferences _preferences;
+
+  static Future init() async =>
+      _preferences = await SharedPreferences.getInstance();
+
   Future saveCardNo(CardNoInfo cardNoInfo) async {
     final preferences = await SharedPreferences.getInstance();
 
     await preferences.setString('cardnumberPreferences', cardNoInfo.cardnumber);
+    await preferences.setString('namePreferences', cardNoInfo.name);
     await preferences.setString('expirydatePreferences', cardNoInfo.expirydate);
     await preferences.setString('addressPreferences', cardNoInfo.address);
     await preferences.setString('cityPreferences', cardNoInfo.city);
@@ -19,6 +26,7 @@ class CardNoPreferences {
     final preferences = await SharedPreferences.getInstance();
 
     final cardnumber = preferences.getString('cardnumberPreferences');
+    final name = preferences.getString('namePreferences');
     final expirydate = preferences.getString('expirydatePreferences');
     final address = preferences.getString('addressPreferences');
     final city = preferences.getString('cityPreferences');
@@ -29,6 +37,7 @@ class CardNoPreferences {
 
     return CardNoInfo(
         cardnumber: cardnumber,
+        name: name,
         expirydate: expirydate,
         address: address,
         city: city,
@@ -37,4 +46,10 @@ class CardNoPreferences {
         cardtype: cardtype,
         cardbrand: cardbrand);
   }
+  static String getAcNo() => _preferences.getString('cardnumberPreferences') ?? '';
+  static String getName() => _preferences.getString('namePreferences') ?? '';
+  static String getExp() => _preferences.getString('expirydatePreferences') ?? '';
+  static String getCardType() => _preferences.getString('cardtypePreferences') ?? '';
+  static String getCardBrand() => _preferences.getString('cardbrandPreferences') ?? '';
+
 }
